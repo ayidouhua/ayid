@@ -5,20 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阿義豆花臺南總店營業時間表</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
         table {
             border-collapse: collapse;
-            width: 50%;
-            margin: 20px auto;
+            width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         th, td {
             border: 1px solid #000;
             padding: 10px;
             text-align: center;
         }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        @media (max-width: 600px) {
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h2 style="text-align: center;">阿義豆花臺南總店即時營業時間表(專案計畫)</h2>
+    <h2>阿義豆花臺南總店即時營業時間表(專案計畫)</h2>
     <table>
         <thead>
             <tr>
@@ -70,8 +97,8 @@
         const businessHours = {
             "Monday": { closed: true },
             "Tuesday": { open: "09:30", close: "12:30" },
-            "Wednesday": { closed: true},
-            "Thursday": { closed: true},
+            "Wednesday": { closed: true },
+            "Thursday": { closed: true },
             "Friday": { open: "09:30", close: "12:30" },
             "Saturday": { open: "09:30", close: "12:30" },
             "Sunday": { open: "09:30", close: "12:30" }
@@ -96,16 +123,13 @@
                         } else {
                             statusElement.innerText = "休息中";
 
-                            // 計算下次營業的時間以刷新網頁
                             const [closeHour, closeMinute] = hours.close.split(":").map(Number);
                             const closeTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), closeHour, closeMinute);
-                            
-                            // 計算下次營業時間的秒數
+
                             if (currentTime < hours.close) {
                                 const timeToClose = closeTime.getTime() - now.getTime();
                                 nextRefreshTime = Math.max(0, timeToClose);
                             } else {
-                                // 當前時間超過今天的關閉時間，設置為明天的開放時間
                                 const [openHour, openMinute] = hours.open.split(":").map(Number);
                                 const nextOpenTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, openHour, openMinute);
                                 nextRefreshTime = nextOpenTime.getTime() - now.getTime();
@@ -117,13 +141,11 @@
                 }
             }
 
-            // 設置計時器刷新頁面
             if (nextRefreshTime !== null) {
                 setTimeout(() => location.reload(), nextRefreshTime);
             }
         }
 
-        // 每分鐘更新一次狀態
         updateStatus();
         setInterval(updateStatus, 60000);
     </script>
